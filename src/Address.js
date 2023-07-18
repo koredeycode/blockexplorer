@@ -1,27 +1,26 @@
 import { useEffect, useState } from "react";
 import alchemy from "./alchemy";
+import CA from "./CA";
+import EOA from "./EOA";
 
 function Address({ match }) {
   const { address } = match.params;
   const [isContractAddress, setIsContractAddress] = useState(false);
+
   useEffect(() => {
     async function getIsContractAddress() {
       // get details of the transaction
       const data = await alchemy.core.isContractAddress(address);
-      console.log(data);
       setIsContractAddress(data);
     }
     getIsContractAddress();
   });
 
-  const renderContract = () => {
-    return <div>Contract</div>;
-  };
-  const renderEOA = () => {
-    return <div>EOA</div>;
-  };
-
-  return <div>{isContractAddress ? renderContract() : renderEOA()}</div>;
+  return (
+    <div>
+      {isContractAddress ? <CA address={address} /> : <EOA address={address} />}
+    </div>
+  );
 }
 
 export default Address;
