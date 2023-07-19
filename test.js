@@ -1,10 +1,9 @@
 // Imports the Alchemy SDK
 const { Alchemy, Network } = require("alchemy-sdk");
-// import { Alchemy, Network } from "alchemy-sdk";
 
 // Configures the Alchemy SDK
 const config = {
-  apiKey: "EW_THcEJRg6JzObECmuNxqDzT4Mb6nTq", // Replace with your API key
+  apiKey: "alchemy-replit", // Replace with your API key
   network: Network.ETH_MAINNET, // Replace with your network
 };
 
@@ -13,8 +12,7 @@ const alchemy = new Alchemy(config);
 
 const main = async () => {
   //Assign the hash to a variable
-  let txHash =
-    "0x92fc42b9642023f2ee2e88094df80ce87e15d91afa812fef383e6e5cd96e2ed3";
+  let txHash = 23;
 
   //Call the method to return the block with transactions
   let response = await alchemy.core.getBlockWithTransactions(txHash);

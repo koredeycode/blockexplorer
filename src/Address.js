@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import alchemy from "./alchemy";
 import { Utils } from "alchemy-sdk";
 
-function Address({ match }) {
-  const { address } = match.params;
+function Address() {
+  const { address } = useParams();
   const [tokensList, setTokensList] = useState([]);
   const [balance, setBalance] = useState(0);
 
@@ -25,7 +26,7 @@ function Address({ match }) {
   return (
     <div>
       <div>{balance}</div>
-      <div className="d-flex">
+      <div className="d-flex flex-wrap">
         {tokensList.map((token) => {
           return Object.entries(token).map((e) => {
             return (

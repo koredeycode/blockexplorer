@@ -1,14 +1,19 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import alchemy from "./alchemy";
 
-function Block({ match }) {
-  const { blockInfo } = match.params;
+function Block() {
+  const { blockInfo } = useParams();
   const [block, setBlock] = useState({});
 
   useEffect(() => {
     async function getBlock() {
       // get details of the block
-      setBlock(await alchemy.core.getBlockWithTransactions(blockInfo));
+      setBlock(
+        await alchemy.core.getBlockWithTransactions(
+          /^\d+$/.test(blockInfo) ? Number(blockInfo) : blockInfo
+        )
+      );
     }
     getBlock();
   }, []);

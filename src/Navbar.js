@@ -6,23 +6,29 @@ function Navbar() {
   // const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState("");
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     // Trim leading and trailing whitespaces from the search value
     const trimmedSearchValue = searchValue.trim();
-    let url = "";
+    let url = "/";
 
     if (trimmedSearchValue) {
       // Check the type of search based on user input
-      if (isValidAddress(trimmedSearchValue)) {
+      if (/^\d+$/.test(trimmedSearchValue)) {
+        url = `/block/${trimmedSearchValue}`;
+      } else if (isValidAddress(trimmedSearchValue)) {
         // Redirect to EOA component with the searched EOA address
-        if (isContractAddress(trimmedSearchValue)) {
+        const bool = await alchemy.core.isContractAddress(trimmedSearchValue);
+        alert(bool);
+        if (bool) {
           url = `/token/${trimmedSearchValue}`;
         } else {
           url = `/address/${trimmedSearchValue}`;
         }
       } else if (isValidHash(trimmedSearchValue)) {
         // Redirect to Block component with the searched block number or hash
-        if (isTxHash(trimmedSearchValue)) {
+        const data = await alchemy.transact.getTransaction(trimmedSearchValue);
+        alert(data);
+        if (Boolean(data)) {
           url = `/tx/${trimmedSearchValue}`;
         } else {
           url = `/block/${trimmedSearchValue}`;
@@ -32,19 +38,10 @@ function Navbar() {
         url = `/address/${trimmedSearchValue}`;
       } else {
         // Invalid search input, handle accordingly (e.g., show an error message)
-        console.log("Invalid search input");
+        alert("Invalid search input");
       }
     }
     window.location.href = url;
-  };
-
-  const isContractAddress = async (input) => {
-    const bool = await alchemy.core.isContractAddress(input);
-    return bool;
-  };
-  const isTxHash = async (input) => {
-    const data = await alchemy.transact.getTransaction(input);
-    return Boolean(data);
   };
 
   const isValidAddress = (input) => {
@@ -54,11 +51,10 @@ function Navbar() {
   };
 
   const isValidHash = (input) => {
-    // Block numbers should be positive integers or block hashes should be 64 characters long
-    const numberRegex = /^\d+$/;
+    // Block numbers should be positive integers or block hashes should be 64 characters long;
     const hashRegex = /^0x[0-9a-fA-F]{64}$/;
 
-    return numberRegex.test(input) || hashRegex.test(input);
+    return hashRegex.test(input);
   };
 
   const isValidDomain = (input) => {

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import alchemy from "./alchemy";
+import { useParams } from "react-router-dom";
 
-function Transaction({ match }) {
-  const { txHash } = match.params;
+function Transaction() {
+  const { txHash } = useParams();
   const [transaction, setTransaction] = useState({});
 
   useEffect(() => {
