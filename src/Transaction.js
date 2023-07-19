@@ -3,27 +3,26 @@ import alchemy from "./alchemy";
 
 function Transaction({ match }) {
   const { txHash } = match.params;
-  const [transaction, setTransaction] = useState();
+  const [transaction, setTransaction] = useState({});
 
   useEffect(() => {
     console.log("inside useeffect");
     async function getTransaction() {
       // get details of the transaction
-      console.log(txHash);
-      setTransaction(await alchemy.transact.getTransaction(txHash));
+      const data = await alchemy.transact.getTransaction(txHash);
+      console.log(data);
+      setTransaction(data);
     }
     getTransaction();
   }, []);
 
   return (
     <div>
-      {Object.entries(transaction).map((e) => {
-        return (
-          <div>
-            {e[0]}: {e[1]}
-          </div>
-        );
-      })}
+      {Object.entries(transaction).map(([key, value]) => (
+        <div key={key}>
+          {key}: {JSON.stringify(value)}
+        </div>
+      ))}
     </div>
   );
 }

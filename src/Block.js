@@ -3,7 +3,7 @@ import alchemy from "./alchemy";
 
 function Block({ match }) {
   const { blockInfo } = match.params;
-  const [block, setBlock] = useState();
+  const [block, setBlock] = useState({});
 
   useEffect(() => {
     async function getBlock() {

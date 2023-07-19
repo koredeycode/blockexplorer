@@ -1,24 +1,41 @@
 import { useEffect, useState } from "react";
 import alchemy from "./alchemy";
-import CA from "./CA";
-import EOA from "./EOA";
+import { Utils } from "alchemy-sdk";
 
 function Address({ match }) {
   const { address } = match.params;
-  const [isContractAddress, setIsContractAddress] = useState(false);
+  const [tokensList, setTokensList] = useState([]);
+  const [balance, setBalance] = useState(0);
 
   useEffect(() => {
-    async function getIsContractAddress() {
+    console.log("inside use effect");
+    async function getAddressData() {
       // get details of the transaction
-      const data = await alchemy.core.isContractAddress(address);
-      setIsContractAddress(data);
+      const balance = Utils.formatEther(
+        await alchemy.core.getBalance(address, "latest")
+      );
+      setBalance(balance);
+      const data = await alchemy.core.getTokensForOwner(address);
+      console.log(data.tokens);
+      setTokensList(data.tokens);
     }
-    getIsContractAddress();
-  });
+    getAddressData();
+  }, []);
 
   return (
     <div>
-      {isContractAddress ? <CA address={address} /> : <EOA address={address} />}
+      <div>{balance}</div>
+      <div className="d-flex">
+        {tokensList.map((token) => {
+          return Object.entries(token).map((e) => {
+            return (
+              <div>
+                {e[0]}: {e[1]}
+              </div>
+            );
+          });
+        })}
+      </div>
     </div>
   );
 }
