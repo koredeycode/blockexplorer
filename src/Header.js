@@ -2,7 +2,7 @@ import React, { useState } from "react";
 // import { useNavigate } from "react-router-dom";
 import alchemy from "./alchemy";
 
-function Navbar() {
+function Header() {
   // const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState("");
 
@@ -41,7 +41,9 @@ function Navbar() {
         alert("Invalid search input");
       }
     }
-    window.location.href = url;
+    if (url !== "/") {
+      window.location.href = url;
+    }
   };
 
   const isValidAddress = (input) => {
@@ -64,15 +66,37 @@ function Navbar() {
   };
 
   return (
-    <nav>
-      <input
-        type="text"
-        value={searchValue}
-        onChange={(e) => setSearchValue(e.target.value)}
-      />
-      <button onClick={handleSearch}>Search</button>
-    </nav>
+    <header>
+      <nav className="py-3 mb-3 border-bottom">
+        <div
+          className="container-fluid d-grid gap-3 align-items-center"
+          style={{ gridTemplateColumns: "1fr 2fr" }}
+        >
+          <div className="">
+            <a href="/">
+              <h3>KoreScan</h3>
+            </a>
+          </div>
+          <div className="d-flex align-items-center">
+            <input
+              type="search"
+              className="form-control no-radius"
+              placeholder="Search by Address / Txn Hash / Block / Token / Domain Name..."
+              aria-label="Search by Address / Txn Hash / Block / Token / Domain Name"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+            />
+            <button
+              className="btn btn-success no-radius"
+              onClick={handleSearch}
+            >
+              Search
+            </button>
+          </div>
+        </div>
+      </nav>
+    </header>
   );
 }
 
-export default Navbar;
+export default Header;

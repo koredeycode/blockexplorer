@@ -5,12 +5,13 @@ import Block from "./Block";
 import Transaction from "./Transaction";
 import Address from "./Address";
 import Token from "./Token";
-import Navbar from "./Navbar";
+import Header from "./Header";
+import Footer from "./Footer";
 
 function App() {
   return (
     <>
-      <Navbar />
+      <Header />
       <Router>
         <Routes>
           <Route path="/" exact element={<Home />} />
@@ -20,6 +21,7 @@ function App() {
           <Route path="/token/:token" element={<Token />} />
         </Routes>
       </Router>
+      <Footer />
     </>
   );
 }
